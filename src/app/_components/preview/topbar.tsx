@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Search, ChevronDown, PanelLeft } from 'lucide-react';
+import { Bell, Search, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,27 +11,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export function PreviewTopbar({
-  onToggleSidebar,
-}: {
-  onToggleSidebar: () => void;
-}) {
+export function PreviewTopbar() {
   return (
     <div className='h-13 border-b border-border bg-background flex items-center px-3 @xl:px-4 gap-2 @xl:gap-3'>
-      <Button
-        variant='ghost'
-        size='icon'
-        className='size-7 shrink-0'
-        onClick={onToggleSidebar}
-      >
-        <PanelLeft className='size-4' />
-      </Button>
+      <SidebarTrigger className='size-7 shrink-0' />
       <div className='flex-1'>
         <h1 className='text-sm font-semibold text-foreground'>Dashboard</h1>
         <p className='text-[11px] text-muted-foreground hidden @xl:block'>

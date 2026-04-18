@@ -1,8 +1,8 @@
 'use client';
 
 import { LogOut, CircleUser, Layers } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import {
+  Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
@@ -14,17 +14,11 @@ import {
 } from '@/components/ui/sidebar';
 import { navItems } from './data';
 
-export function PreviewSidebar({ open }: { open: boolean }) {
+export function PreviewSidebar() {
   return (
-    <div
-      className={cn(
-        'absolute inset-y-0 left-0 z-20 w-56',
-        'flex flex-col bg-sidebar text-sidebar-foreground',
-        'border-r border-sidebar-border',
-        'transition-transform duration-200 ease-linear',
-        '@2xl/preview:shadow-none shadow-xl',
-        open ? 'translate-x-0' : '-translate-x-full',
-      )}
+    <Sidebar
+      collapsible='offcanvas'
+      className='absolute! inset-y-0! h-full! z-20 @2xl/preview:shadow-none shadow-xl'
     >
       <SidebarHeader className='h-13 flex-row items-center border-b border-sidebar-border px-4 py-0 gap-2'>
         <div className='size-6 bg-sidebar-primary rounded-md flex items-center justify-center shrink-0'>
@@ -71,6 +65,6 @@ export function PreviewSidebar({ open }: { open: boolean }) {
           <LogOut className='size-3.5 text-sidebar-foreground/50' />
         </div>
       </SidebarFooter>
-    </div>
+    </Sidebar>
   );
 }
