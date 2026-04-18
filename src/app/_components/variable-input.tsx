@@ -21,6 +21,7 @@ export function VariableInput({
   const vars = editMode === 'light' ? light : dark;
   const value = vars[varKey];
   const pickerRef = useRef<HTMLInputElement>(null);
+  const isUserInteracting = useRef(false);
 
   const [localHex, debouncedHex, setLocalHex] = useDebounceState(
     valueToHex(value),
@@ -29,10 +30,19 @@ export function VariableInput({
 
   useEffect(() => {
     if (isRadius) return;
+    setLocalHex(valueToHex(vars[varKey]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode]);
+
+  useEffect(() => {
+    if (isRadius) return;
+    if (!isUserInteracting.current) return;
+    isUserInteracting.current = false;
     setVar(editMode, varKey, valueToOklch(debouncedHex));
   }, [debouncedHex, editMode, varKey, setVar, isRadius]);
 
   function handlePickerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    isUserInteracting.current = true;
     setLocalHex(e.target.value);
   }
 

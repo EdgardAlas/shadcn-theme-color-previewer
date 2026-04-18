@@ -4,6 +4,7 @@ import { Geist } from 'next/font/google';
 import { IBM_Plex_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const ibmPlexMono = IBM_Plex_Mono({
@@ -13,7 +14,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Shadcn Theme Generator',
+  title: 'Shadcn Theme Creator',
   description: 'Visually customize and export Shadcn UI CSS variables',
 };
 
@@ -25,10 +26,18 @@ export default function RootLayout({
   return (
     <html
       lang='en'
+      suppressHydrationWarning
       className={cn('font-sans', geist.variable, ibmPlexMono.variable)}
     >
       <body>
-        <TooltipProvider>{children}</TooltipProvider>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
