@@ -16,10 +16,10 @@ export function AppHeader() {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <header className='h-10 shrink-0 flex items-center justify-between px-4 lg:px-6 border-b border-border bg-background z-30'>
+    <header className='h-14 shrink-0 flex items-center justify-between px-4 lg:px-6 border-b border-border bg-background z-30'>
       <div className='flex items-center gap-2 lg:gap-3'>
         <span className='text-[13px] font-mono font-medium tracking-tight text-foreground'>
-          Shadcn Theme Preview
+          Shadcn Theme Color Previewer
         </span>
         <span className='text-[10px] font-mono text-muted-foreground border border-border rounded px-1.5 py-0.5'>
           v1.0

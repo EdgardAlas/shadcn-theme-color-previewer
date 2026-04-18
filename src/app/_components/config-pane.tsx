@@ -213,6 +213,13 @@ export function ConfigPane({ className }: { className?: string }) {
     [],
   );
 
+  function handleCopyCSS(setFlag: (v: boolean) => void) {
+    navigator.clipboard.writeText(generateCSS(light, dark)).then(() => {
+      setFlag(true);
+      setTimeout(() => setFlag(false), 2000);
+    });
+  }
+
   function handleApplyImport() {
     const parsed = parseThemeCSS(importCss);
     const lightCount = Object.keys(parsed.light).length;
@@ -228,19 +235,11 @@ export function ConfigPane({ className }: { className?: string }) {
   }
 
   function handleCopy() {
-    const css = generateCSS(light, dark);
-    navigator.clipboard.writeText(css).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    handleCopyCSS(setCopied);
   }
 
   function handleCopyInDialog() {
-    const css = generateCSS(light, dark);
-    navigator.clipboard.writeText(css).then(() => {
-      setCopiedInDialog(true);
-      setTimeout(() => setCopiedInDialog(false), 2000);
-    });
+    handleCopyCSS(setCopiedInDialog);
   }
 
   const searchLower = searchQuery.trim().toLowerCase();
@@ -260,7 +259,7 @@ export function ConfigPane({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className='h-10 flex-shrink-0 flex items-center justify-between px-3 border-b border-border'>
+      <div className='h-14 flex-shrink-0 flex items-center justify-between px-3 border-b border-border'>
         <span className='text-[11px] font-mono text-muted-foreground uppercase tracking-widest'>
           Variables
         </span>

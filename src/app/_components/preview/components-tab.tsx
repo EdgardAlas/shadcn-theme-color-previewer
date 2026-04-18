@@ -5,6 +5,12 @@ import {
   LayoutDashboard,
   Users,
   Settings,
+  Info,
+  CheckCircle2,
+  AlertTriangle,
+  Bell,
+  Moon,
+  Wifi,
 } from 'lucide-react';
 import {
   Card,
@@ -16,6 +22,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +58,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { buildStatuses } from './data';
 
@@ -51,98 +72,183 @@ export function ComponentsTab() {
         <CardHeader className='pb-3'>
           <CardTitle className='text-sm'>Interactive Elements</CardTitle>
           <CardDescription className='text-xs'>
-            Overlays, menus, and dialogs
+            Buttons, overlays, controls, and selects
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-wrap gap-2'>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    className='text-xs h-8 gap-1'
-                  />
-                }
-              >
-                Actions
-                <ChevronDown className='size-3' />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className='w-40'>
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel className='text-xs'>
-                    Operations
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className='text-xs'>
-                    Edit record
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-xs'>
-                    Duplicate
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-xs'>
-                    Archive
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className='text-xs text-destructive'>
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className='flex flex-col gap-4'>
+            <div className='flex flex-wrap gap-1.5'>
+              <Button size='sm' className='text-xs h-7'>
+                Primary
+              </Button>
+              <Button variant='secondary' size='sm' className='text-xs h-7'>
+                Secondary
+              </Button>
+              <Button variant='outline' size='sm' className='text-xs h-7'>
+                Outline
+              </Button>
+              <Button variant='ghost' size='sm' className='text-xs h-7'>
+                Ghost
+              </Button>
+              <Button variant='destructive' size='sm' className='text-xs h-7'>
+                Danger
+              </Button>
+            </div>
 
-            <Popover>
-              <PopoverTrigger
-                render={
-                  <Button variant='outline' size='sm' className='text-xs h-8' />
-                }
-              >
-                Info
-              </PopoverTrigger>
-              <PopoverContent className='w-56 p-3'>
-                <div className='flex flex-col gap-1'>
-                  <p className='text-xs font-medium'>Project Alpha</p>
-                  <p className='text-[11px] text-muted-foreground'>
-                    Last updated 2 hours ago. 4 contributors active this week.
-                  </p>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <div className='flex flex-wrap gap-1.5'>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='text-xs h-7 gap-1'
+                    />
+                  }
+                >
+                  Actions
+                  <ChevronDown className='size-3' />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='w-40'>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className='text-xs'>
+                      Operations
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className='text-xs'>
+                      Edit record
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='text-xs'>
+                      Duplicate
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='text-xs'>
+                      Archive
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className='text-xs text-destructive'>
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            <AlertDialog>
-              <AlertDialogTrigger
-                render={
-                  <Button
-                    variant='destructive'
-                    size='sm'
-                    className='text-xs h-8'
-                  />
-                }
-              >
-                Delete
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. The record will be permanently
-                    removed.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Delete</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              <Popover>
+                <PopoverTrigger
+                  render={
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='text-xs h-7'
+                    />
+                  }
+                >
+                  Popover
+                </PopoverTrigger>
+                <PopoverContent className='w-52 p-3'>
+                  <div className='flex flex-col gap-1'>
+                    <p className='text-xs font-medium'>Project Alpha</p>
+                    <p className='text-[11px] text-muted-foreground'>
+                      Last updated 2 hours ago. 4 contributors active.
+                    </p>
+                  </div>
+                </PopoverContent>
+              </Popover>
 
-            <Button variant='secondary' size='sm' className='text-xs h-8'>
-              Secondary
-            </Button>
-            <Button variant='ghost' size='sm' className='text-xs h-8'>
-              Ghost
-            </Button>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  render={
+                    <Button
+                      variant='destructive'
+                      size='sm'
+                      className='text-xs h-7'
+                    />
+                  }
+                >
+                  Delete
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. The record will be
+                      permanently removed.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Delete</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+
+            <Separator />
+
+            <div className='grid grid-cols-2 gap-3'>
+              <div className='flex flex-col gap-2.5'>
+                {[
+                  { icon: Bell, label: 'Notifications', defaultChecked: true },
+                  { icon: Moon, label: 'Dark mode', defaultChecked: false },
+                  { icon: Wifi, label: 'Auto-sync', defaultChecked: true },
+                ].map(({ icon: Icon, label, defaultChecked }) => (
+                  <div
+                    key={label}
+                    className='flex items-center justify-between gap-2'
+                  >
+                    <div className='flex items-center gap-1.5'>
+                      <Icon className='size-3 text-muted-foreground' />
+                      <Label className='text-[11px] font-normal cursor-pointer'>
+                        {label}
+                      </Label>
+                    </div>
+                    <Switch
+                      defaultChecked={defaultChecked}
+                      className='scale-75 origin-right'
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className='flex flex-col gap-2.5'>
+                {[
+                  { id: 'cb-1', label: 'Email alerts', checked: true },
+                  { id: 'cb-2', label: 'SMS alerts', checked: false },
+                  { id: 'cb-3', label: 'Push alerts', checked: true },
+                ].map(({ id, label, checked }) => (
+                  <div key={id} className='flex items-center gap-2'>
+                    <Checkbox
+                      id={id}
+                      defaultChecked={checked}
+                      className='size-3.5'
+                    />
+                    <Label
+                      htmlFor={id}
+                      className='text-[11px] font-normal cursor-pointer'
+                    >
+                      {label}
+                    </Label>
+                  </div>
+                ))}
+                <Select defaultValue='member'>
+                  <SelectTrigger className='h-7 text-[11px] mt-0.5'>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value='admin' className='text-xs'>
+                        Admin
+                      </SelectItem>
+                      <SelectItem value='member' className='text-xs'>
+                        Member
+                      </SelectItem>
+                      <SelectItem value='viewer' className='text-xs'>
+                        Viewer
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -221,6 +327,94 @@ export function ComponentsTab() {
                 {label}
               </div>
             ))}
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className='pb-3'>
+          <CardTitle className='text-sm'>Loading States</CardTitle>
+          <CardDescription className='text-xs'>
+            Skeleton placeholders while content loads
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex flex-col gap-3'>
+            <div className='flex items-center gap-3'>
+              <Skeleton className='size-9 rounded-full shrink-0' />
+              <div className='flex flex-col gap-1.5 flex-1'>
+                <Skeleton className='h-3 w-3/4 rounded' />
+                <Skeleton className='h-2.5 w-1/2 rounded' />
+              </div>
+            </div>
+            <div className='flex flex-col gap-1.5'>
+              <Skeleton className='h-3 w-full rounded' />
+              <Skeleton className='h-3 w-5/6 rounded' />
+              <Skeleton className='h-3 w-4/6 rounded' />
+            </div>
+            <Skeleton className='h-16 w-full rounded-md' />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='pb-3'>
+          <CardTitle className='text-sm'>Input Variants</CardTitle>
+          <CardDescription className='text-xs'>
+            Form control states
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex flex-col gap-2.5'>
+            <Input className='h-8 text-xs' placeholder='Default input' />
+            <Input
+              className='h-8 text-xs'
+              placeholder='Disabled input'
+              disabled
+            />
+            <Input
+              className='h-8 text-xs'
+              placeholder='Invalid input'
+              aria-invalid
+              defaultValue='bad@value'
+            />
+            <Textarea
+              className='text-xs min-h-14 resize-none'
+              placeholder='Textarea field...'
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='pb-3'>
+          <CardTitle className='text-sm'>Notifications</CardTitle>
+          <CardDescription className='text-xs'>
+            Alert variants for feedback and status
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex flex-col gap-2.5'>
+            <Alert>
+              <Info className='size-4' />
+              <AlertTitle>Info</AlertTitle>
+              <AlertDescription>
+                Your session will expire in 30 minutes.
+              </AlertDescription>
+            </Alert>
+            <Alert className='border-chart-2/30 bg-chart-2/10 text-chart-2 *:data-[slot=alert-description]:text-chart-2/80'>
+              <CheckCircle2 className='size-4' />
+              <AlertTitle>Success</AlertTitle>
+              <AlertDescription>
+                Changes saved and deployed successfully.
+              </AlertDescription>
+            </Alert>
+            <Alert variant='destructive'>
+              <AlertTriangle className='size-4' />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                Failed to connect. Check your credentials.
+              </AlertDescription>
+            </Alert>
           </div>
         </CardContent>
       </Card>

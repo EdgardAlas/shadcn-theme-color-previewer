@@ -17,6 +17,7 @@ import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -62,15 +63,17 @@ export function FormTab() {
                   <SelectValue placeholder='Select role' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='admin' className='text-xs'>
-                    Admin
-                  </SelectItem>
-                  <SelectItem value='editor' className='text-xs'>
-                    Editor
-                  </SelectItem>
-                  <SelectItem value='viewer' className='text-xs'>
-                    Viewer
-                  </SelectItem>
+                  <SelectGroup>
+                    <SelectItem value='admin' className='text-xs'>
+                      Admin
+                    </SelectItem>
+                    <SelectItem value='editor' className='text-xs'>
+                      Editor
+                    </SelectItem>
+                    <SelectItem value='viewer' className='text-xs'>
+                      Viewer
+                    </SelectItem>
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>

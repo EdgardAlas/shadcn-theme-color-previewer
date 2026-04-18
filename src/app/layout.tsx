@@ -14,8 +14,37 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Shadcn Theme Creator',
-  description: 'Visually customize and export Shadcn UI CSS variables',
+  title: {
+    default: 'Shadcn Theme Color Previewer',
+    template: '%s | Shadcn Theme Color Previewer',
+  },
+  description:
+    'Visual editor for all Shadcn UI CSS variables. Customize light and dark mode tokens in OKLCH, preview live on a real dashboard, and export production-ready CSS.',
+  keywords: [
+    'shadcn',
+    'shadcn/ui',
+    'theme',
+    'css variables',
+    'oklch',
+    'tailwind',
+    'color editor',
+    'dark mode',
+    'design tokens',
+  ],
+  openGraph: {
+    title: 'Shadcn Theme Color Previewer',
+    description:
+      'Visual editor for Shadcn UI CSS variables. Live dashboard preview, OKLCH editing, and one-click CSS export.',
+    type: 'website',
+    siteName: 'Shadcn Theme Color Previewer',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shadcn Theme Color Previewer',
+    description:
+      'Visual editor for Shadcn UI CSS variables. Live dashboard preview, OKLCH editing, and one-click CSS export.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({

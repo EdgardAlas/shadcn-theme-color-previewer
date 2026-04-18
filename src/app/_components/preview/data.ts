@@ -46,6 +46,14 @@ export const navItems = [
   { icon: Settings, label: 'Settings' },
 ];
 
+export const teamMembers = [
+  { name: 'Alice Brown', role: 'Admin', status: 'active', initials: 'AB' },
+  { name: 'Bob Carter', role: 'Editor', status: 'active', initials: 'BC' },
+  { name: 'Carol Davis', role: 'Viewer', status: 'inactive', initials: 'CD' },
+  { name: 'John Doe', role: 'Admin', status: 'active', initials: 'JD' },
+  { name: 'Eve Foster', role: 'Editor', status: 'active', initials: 'EF' },
+];
+
 export const activityItems = [
   { user: 'Alice Brown', action: 'Created report Q2-2026', time: '2m ago' },
   { user: 'Bob Carter', action: 'Updated user permissions', time: '14m ago' },

@@ -20,7 +20,7 @@ function AccentCard() {
   const items = ['Dashboard', 'Analytics', 'Reports', 'Settings'];
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Accent</CardTitle>
         <CardDescription className='text-[11px]'>
           Navigation hover &amp; focus highlight
@@ -49,7 +49,7 @@ function AccentCard() {
 function DestructiveCard() {
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Destructive</CardTitle>
         <CardDescription className='text-[11px]'>
           Errors, warnings, and delete actions
@@ -98,7 +98,7 @@ function DestructiveCard() {
 function MutedCard() {
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Muted</CardTitle>
         <CardDescription className='text-[11px]'>
           Subtitles, placeholders, and secondary content
@@ -129,7 +129,7 @@ function PopoverCard() {
   const options = ['Edit', 'Duplicate', 'Archive', 'Delete'];
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Popover</CardTitle>
         <CardDescription className='text-[11px]'>
           Dropdowns, menus, and floating panels
@@ -174,7 +174,7 @@ const chartConfig = {
 function ChartsCard() {
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Charts</CardTitle>
         <CardDescription className='text-[11px]'>
           Data visualization — all 5 chart colors
@@ -258,7 +258,7 @@ const sidebarItems = [
 function SidebarCard() {
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Sidebar</CardTitle>
         <CardDescription className='text-[11px]'>
           Navigation panel background and states
@@ -315,7 +315,7 @@ function SidebarCard() {
 function UtilityCard() {
   return (
     <Card>
-      <CardHeader className='pb-2 pt-3 px-3'>
+      <CardHeader>
         <CardTitle className='text-xs font-medium'>Utility</CardTitle>
         <CardDescription className='text-[11px]'>
           Border, input border, and focus ring

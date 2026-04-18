@@ -84,7 +84,6 @@
 }
 
 .dark {
-  /* Deep indigo-black — rich, flat, no pure blacks */
   --background: oklch(0.152 0.018 264);
   --foreground: oklch(0.942 0.007 275);
   --card: oklch(0.192 0.02 264);
