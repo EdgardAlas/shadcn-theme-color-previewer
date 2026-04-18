@@ -11,11 +11,13 @@ import type { ThemeVars } from '@/types/theme';
 interface VariableInputProps {
   varKey: keyof ThemeVars;
   isRadius?: boolean;
+  description?: string;
 }
 
 export function VariableInput({
   varKey,
   isRadius = false,
+  description,
 }: VariableInputProps) {
   const { light, dark, editMode, setVar } = useThemeStore();
   const vars = editMode === 'light' ? light : dark;
@@ -80,7 +82,7 @@ export function VariableInput({
       )}
       <div className='flex flex-col flex-1 min-w-0 gap-0.5'>
         <span className='font-mono text-[11px] text-muted-foreground truncate select-none'>
-          --{varKey}
+          {varKey}
         </span>
         <Input
           value={value}

@@ -7,6 +7,7 @@ import { PreviewCharts } from './charts';
 import { FormTab } from './form-tab';
 import { ComponentsTab } from './components-tab';
 import { ActivityTab } from './activity-tab';
+import { ColorsTab } from './colors-tab';
 
 const statCards = [
   {
@@ -76,6 +77,9 @@ export function PreviewDashboard({
             <TabsTrigger value='data' className='text-xs h-7'>
               Data
             </TabsTrigger>
+            <TabsTrigger value='colors' className='text-xs h-7'>
+              Colors
+            </TabsTrigger>
           </TabsList>
           <TabsContent value='form' className='mt-4'>
             <FormTab />
@@ -85,6 +89,9 @@ export function PreviewDashboard({
           </TabsContent>
           <TabsContent value='data' className='mt-4'>
             <ActivityTab />
+          </TabsContent>
+          <TabsContent value='colors' className='mt-4'>
+            <ColorsTab />
           </TabsContent>
         </Tabs>
       </div>

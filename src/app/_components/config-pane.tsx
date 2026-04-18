@@ -1,7 +1,15 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { ClipboardCopy, RotateCcw, Check, Eye, X, Upload } from 'lucide-react';
+import {
+  ClipboardCopy,
+  RotateCcw,
+  Check,
+  Eye,
+  X,
+  Upload,
+  Search,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -18,6 +26,12 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group';
 import { useThemeStore } from '@/store/theme-store';
 import { VariableInput } from './variable-input';
 import { ThemeManager } from './theme-manager';
@@ -28,73 +42,139 @@ import type { ThemeVars } from '@/types/theme';
 
 type VarGroup = {
   label: string;
-  vars: { key: keyof ThemeVars; isRadius?: boolean }[];
+  vars: { key: keyof ThemeVars; isRadius?: boolean; description?: string }[];
 };
 
 const VAR_GROUPS: VarGroup[] = [
   {
     label: 'Base',
     vars: [
-      { key: 'background' },
-      { key: 'foreground' },
-      { key: 'border' },
-      { key: 'input' },
-      { key: 'ring' },
+      {
+        key: 'background',
+        description: 'Main page background, entire app canvas',
+      },
+      { key: 'foreground', description: 'Default text color and icons' },
+      { key: 'border', description: 'Card edges, table rows, dividers' },
+      { key: 'input', description: 'Text input and select field borders' },
+      {
+        key: 'ring',
+        description: 'Focus ring on buttons, inputs, interactive elements',
+      },
     ],
   },
   {
     label: 'Card',
-    vars: [{ key: 'card' }, { key: 'card-foreground' }],
+    vars: [
+      { key: 'card', description: 'Stat card backgrounds, content panels' },
+      { key: 'card-foreground', description: 'Text inside cards and panels' },
+    ],
   },
   {
     label: 'Popover',
-    vars: [{ key: 'popover' }, { key: 'popover-foreground' }],
+    vars: [
+      {
+        key: 'popover',
+        description: 'Dropdown menus, select popups, sheet panels',
+      },
+      {
+        key: 'popover-foreground',
+        description: 'Text in dropdowns and sheet panels',
+      },
+    ],
   },
   {
     label: 'Primary',
-    vars: [{ key: 'primary' }, { key: 'primary-foreground' }],
+    vars: [
+      {
+        key: 'primary',
+        description: 'Primary action buttons, active indicators',
+      },
+      { key: 'primary-foreground', description: 'Text on primary buttons' },
+    ],
   },
   {
     label: 'Secondary',
-    vars: [{ key: 'secondary' }, { key: 'secondary-foreground' }],
+    vars: [
+      { key: 'secondary', description: 'Secondary buttons, outlined badges' },
+      { key: 'secondary-foreground', description: 'Text on secondary buttons' },
+    ],
   },
   {
     label: 'Muted',
-    vars: [{ key: 'muted' }, { key: 'muted-foreground' }],
+    vars: [
+      {
+        key: 'muted',
+        description: 'Subtle section backgrounds, skeleton loaders',
+      },
+      {
+        key: 'muted-foreground',
+        description: 'Labels, metadata, captions, placeholder text',
+      },
+    ],
   },
   {
     label: 'Accent',
-    vars: [{ key: 'accent' }, { key: 'accent-foreground' }],
+    vars: [
+      { key: 'accent', description: 'Menu item hover/focus highlight' },
+      {
+        key: 'accent-foreground',
+        description: 'Text on highlighted menu items',
+      },
+    ],
   },
   {
     label: 'Destructive',
-    vars: [{ key: 'destructive' }, { key: 'destructive-foreground' }],
+    vars: [
+      {
+        key: 'destructive',
+        description: 'Delete buttons, error states, warnings',
+      },
+      {
+        key: 'destructive-foreground',
+        description: 'Text on destructive elements',
+      },
+    ],
   },
   {
     label: 'Charts',
     vars: [
-      { key: 'chart-1' },
-      { key: 'chart-2' },
-      { key: 'chart-3' },
-      { key: 'chart-4' },
-      { key: 'chart-5' },
+      { key: 'chart-1', description: 'Bar chart primary series' },
+      { key: 'chart-2', description: 'Bar chart secondary series' },
+      { key: 'chart-3', description: 'Area chart fill' },
+      { key: 'chart-4', description: 'Line chart stroke' },
+      { key: 'chart-5', description: 'Donut chart accent segment' },
     ],
   },
   {
     label: 'Radius',
-    vars: [{ key: 'radius', isRadius: true }],
+    vars: [
+      {
+        key: 'radius',
+        isRadius: true,
+        description: 'Border radius on cards, buttons, inputs',
+      },
+    ],
   },
   {
     label: 'Sidebar',
     vars: [
-      { key: 'sidebar' },
-      { key: 'sidebar-foreground' },
-      { key: 'sidebar-primary' },
-      { key: 'sidebar-primary-foreground' },
-      { key: 'sidebar-accent' },
-      { key: 'sidebar-accent-foreground' },
-      { key: 'sidebar-border' },
-      { key: 'sidebar-ring' },
+      { key: 'sidebar', description: 'Sidebar panel background' },
+      { key: 'sidebar-foreground', description: 'Sidebar nav text and icons' },
+      {
+        key: 'sidebar-primary',
+        description: 'Active nav item background in sidebar',
+      },
+      {
+        key: 'sidebar-primary-foreground',
+        description: 'Text on active sidebar nav item',
+      },
+      { key: 'sidebar-accent', description: 'Sidebar nav item hover state' },
+      {
+        key: 'sidebar-accent-foreground',
+        description: 'Text on hovered sidebar items',
+      },
+      { key: 'sidebar-border', description: 'Sidebar divider line' },
+      { key: 'sidebar-ring', description: 'Focus ring inside sidebar' },
     ],
   },
 ];
@@ -115,6 +195,7 @@ export function ConfigPane({ className }: { className?: string }) {
   const [importCss, setImportCss] = useState('');
   const [importOpen, setImportOpen] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = useCallback(
@@ -161,6 +242,16 @@ export function ConfigPane({ className }: { className?: string }) {
       setTimeout(() => setCopiedInDialog(false), 2000);
     });
   }
+
+  const searchLower = searchQuery.trim().toLowerCase();
+  const filteredGroups = searchLower
+    ? VAR_GROUPS.map((group) => ({
+        ...group,
+        vars: group.vars.filter(({ key }) =>
+          key.toLowerCase().includes(searchLower),
+        ),
+      })).filter((group) => group.vars.length > 0)
+    : VAR_GROUPS;
 
   return (
     <div
@@ -226,6 +317,30 @@ export function ConfigPane({ className }: { className?: string }) {
             <TooltipContent side='bottom'>Reset to defaults</TooltipContent>
           </Tooltip>
         </div>
+      </div>
+
+      <div className='px-2.5 py-1.5 border-b border-border'>
+        <InputGroup className='h-7'>
+          <InputGroupInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder='Search variables...'
+            className='text-[11px] font-mono'
+          />
+          <InputGroupAddon align='inline-start'>
+            <Search className='size-3.5' />
+          </InputGroupAddon>
+          {searchQuery && (
+            <InputGroupAddon align='inline-end'>
+              <InputGroupButton
+                onClick={() => setSearchQuery('')}
+                aria-label='Clear search'
+              >
+                <X className='size-3' />
+              </InputGroupButton>
+            </InputGroupAddon>
+          )}
+        </InputGroup>
       </div>
 
       <ScrollArea className='flex-1 min-h-0'>
@@ -411,18 +526,28 @@ export function ConfigPane({ className }: { className?: string }) {
             </div>
           </div>
 
-          {VAR_GROUPS.map((group) => (
+          {filteredGroups.map((group) => (
             <div key={group.label}>
               <div className='px-3 py-1.5 bg-muted/50 border-y border-border text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground'>
                 {group.label}
               </div>
               <div className='flex flex-col'>
-                {group.vars.map(({ key, isRadius }) => (
-                  <VariableInput key={key} varKey={key} isRadius={isRadius} />
+                {group.vars.map(({ key, isRadius, description }) => (
+                  <VariableInput
+                    key={key}
+                    varKey={key}
+                    isRadius={isRadius}
+                    description={description}
+                  />
                 ))}
               </div>
             </div>
           ))}
+          {searchQuery.trim() && filteredGroups.length === 0 && (
+            <div className='px-3 py-8 text-center text-[11px] font-mono text-muted-foreground'>
+              No variables match &ldquo;{searchQuery}&rdquo;
+            </div>
+          )}
         </div>
 
         <div className='h-8' />
