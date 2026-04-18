@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ClipboardCopy, RotateCcw, Check, Eye } from 'lucide-react';
+import { ClipboardCopy, RotateCcw, Check, Eye, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useSidebar } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Tooltip,
@@ -21,6 +22,7 @@ import { useThemeStore } from '@/store/theme-store';
 import { VariableInput } from './variable-input';
 import { ThemeManager } from './theme-manager';
 import { generateCSS } from '@/lib/theme-export';
+import { cn } from '@/lib/utils';
 import type { ThemeVars } from '@/types/theme';
 
 type VarGroup = {
@@ -96,7 +98,8 @@ const VAR_GROUPS: VarGroup[] = [
   },
 ];
 
-export function ConfigPane() {
+export function ConfigPane({ className }: { className?: string }) {
+  const { toggleSidebar } = useSidebar();
   const { light, dark, editMode, setEditMode, resetToDefaults } =
     useThemeStore();
   const [copied, setCopied] = useState(false);
@@ -119,12 +122,25 @@ export function ConfigPane() {
   }
 
   return (
-    <div className='w-[380px] flex-shrink-0 flex flex-col overflow-hidden border-l border-border bg-background'>
+    <div
+      className={cn(
+        'w-[380px] flex-shrink-0 flex flex-col overflow-hidden border-l border-border bg-background',
+        className,
+      )}
+    >
       <div className='h-10 flex-shrink-0 flex items-center justify-between px-3 border-b border-border'>
         <span className='text-[11px] font-mono text-muted-foreground uppercase tracking-widest'>
           Variables
         </span>
         <div className='flex items-center gap-1'>
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={toggleSidebar}
+            className='md:hidden size-7 p-0 text-muted-foreground'
+          >
+            <X className='size-3.5' />
+          </Button>
           <div className='flex items-center gap-0.5 bg-muted rounded-md p-0.5'>
             <button
               onClick={() => setEditMode('light')}

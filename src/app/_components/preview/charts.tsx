@@ -30,8 +30,8 @@ import {
 
 export function PreviewCharts() {
   return (
-    <div className='grid grid-cols-3 gap-4'>
-      <Card className='col-span-2'>
+    <div className='grid grid-cols-1 @3xl:grid-cols-3 gap-4'>
+      <Card className='lg:col-span-2'>
         <CardHeader className='pb-2'>
           <CardTitle className='text-sm'>Revenue Overview</CardTitle>
           <CardDescription className='text-xs'>

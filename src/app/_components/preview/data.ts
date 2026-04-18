@@ -66,4 +66,5 @@ export const buildStatuses = [
   { label: 'Tests', status: 'failing', color: 'text-destructive' },
   { label: 'Deploy', status: 'pending', color: 'text-muted-foreground' },
   { label: 'Security', status: 'passing', color: 'text-chart-2' },
+  { label: 'Coverage', status: 'warning', color: 'text-chart-5' },
 ];

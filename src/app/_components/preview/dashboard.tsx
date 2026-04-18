@@ -1,5 +1,6 @@
 import { TrendingUp, Users, Activity, TicketCheck } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import { PreviewTopbar } from './topbar';
 import { StatCard } from './stat-card';
 import { PreviewCharts } from './charts';
@@ -38,13 +39,25 @@ const statCards = [
   },
 ];
 
-export function PreviewDashboard() {
+export function PreviewDashboard({
+  onToggleSidebar,
+  sidebarOpen,
+}: {
+  onToggleSidebar: () => void;
+  sidebarOpen: boolean;
+}) {
   return (
-    <div className='flex-1 overflow-auto bg-background text-foreground'>
-      <PreviewTopbar />
+    <div
+      className={cn(
+        'flex-1 overflow-auto bg-background text-foreground @container',
+        'transition-[margin-left] duration-200 ease-linear',
+        sidebarOpen ? '@2xl/preview:ml-56' : 'ml-0',
+      )}
+    >
+      <PreviewTopbar onToggleSidebar={onToggleSidebar} />
 
-      <div className='p-6 flex flex-col gap-6'>
-        <div className='grid grid-cols-4 gap-4'>
+      <div className='p-3 @xl:p-5 @3xl:p-6 flex flex-col gap-3 @xl:gap-4 @3xl:gap-6'>
+        <div className='grid grid-cols-2 @3xl:grid-cols-4 gap-3'>
           {statCards.map((card) => (
             <StatCard key={card.title} {...card} />
           ))}

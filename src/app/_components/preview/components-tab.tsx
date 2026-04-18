@@ -1,4 +1,11 @@
-import { ChevronDown } from 'lucide-react';
+import {
+  ChevronDown,
+  BarChart2,
+  FileText,
+  LayoutDashboard,
+  Users,
+  Settings,
+} from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -39,7 +46,7 @@ import { buildStatuses } from './data';
 
 export function ComponentsTab() {
   return (
-    <div className='grid grid-cols-2 gap-4'>
+    <div className='grid grid-cols-1 @2xl:grid-cols-2 gap-4'>
       <Card>
         <CardHeader className='pb-3'>
           <CardTitle className='text-sm'>Interactive Elements</CardTitle>
@@ -155,6 +162,16 @@ export function ComponentsTab() {
               <Badge variant='outline'>Outline</Badge>
               <Badge variant='destructive'>Destructive</Badge>
             </div>
+            <div className='flex flex-wrap gap-1.5'>
+              {(['⌘K', '⌃P', '⌥T', '⇧⌘P'] as const).map((key) => (
+                <span
+                  key={key}
+                  className='inline-flex items-center rounded px-1.5 py-0.5 text-[11px] font-mono bg-accent text-accent-foreground border border-border'
+                >
+                  {key}
+                </span>
+              ))}
+            </div>
             <Separator />
             <div className='flex flex-col gap-2'>
               {buildStatuses.map(({ label, status, color }) => (
@@ -171,6 +188,39 @@ export function ComponentsTab() {
                 </div>
               ))}
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='pb-3'>
+          <CardTitle className='text-sm'>Selection & Highlight</CardTitle>
+          <CardDescription className='text-xs'>
+            Accent token in navigation and list items
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='flex flex-col gap-1'>
+            {[
+              { icon: LayoutDashboard, label: 'Dashboard', active: true },
+              { icon: BarChart2, label: 'Analytics', active: false },
+              { icon: FileText, label: 'Reports', active: false },
+              { icon: Users, label: 'Users', active: false },
+              { icon: Settings, label: 'Settings', active: false },
+            ].map(({ icon: Icon, label, active }) => (
+              <div
+                key={label}
+                className={cn(
+                  'flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs cursor-pointer transition-colors',
+                  active
+                    ? 'bg-accent text-accent-foreground font-medium'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
+                )}
+              >
+                <Icon className='size-3.5 shrink-0' />
+                {label}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>

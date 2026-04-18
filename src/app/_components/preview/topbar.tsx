@@ -1,4 +1,6 @@
-import { Bell, Search, ChevronDown } from 'lucide-react';
+'use client';
+
+import { Bell, Search, ChevronDown, PanelLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,12 +17,24 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export function PreviewTopbar() {
+export function PreviewTopbar({
+  onToggleSidebar,
+}: {
+  onToggleSidebar: () => void;
+}) {
   return (
-    <div className='h-[52px] border-b border-border bg-background flex items-center px-6 gap-4'>
+    <div className='h-13 border-b border-border bg-background flex items-center px-3 @xl:px-4 gap-2 @xl:gap-3'>
+      <Button
+        variant='ghost'
+        size='icon'
+        className='size-7 shrink-0'
+        onClick={onToggleSidebar}
+      >
+        <PanelLeft className='size-4' />
+      </Button>
       <div className='flex-1'>
         <h1 className='text-sm font-semibold text-foreground'>Dashboard</h1>
-        <p className='text-[11px] text-muted-foreground'>
+        <p className='text-[11px] text-muted-foreground hidden @xl:block'>
           Overview / Analytics
         </p>
       </div>
@@ -31,7 +45,7 @@ export function PreviewTopbar() {
           className='h-7 gap-1.5 text-xs text-foreground'
         >
           <Search className='size-3.5' />
-          Search
+          <span className='hidden @xl:inline'>Search</span>
         </Button>
         <Tooltip>
           <TooltipTrigger
