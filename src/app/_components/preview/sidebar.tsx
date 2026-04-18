@@ -1,5 +1,3 @@
-'use client';
-
 import { LogOut, CircleUser, Layers } from 'lucide-react';
 import {
   SidebarProvider,

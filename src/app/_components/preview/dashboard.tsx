@@ -1,5 +1,3 @@
-'use client';
-
 import { TrendingUp, Users, Activity, TicketCheck } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PreviewTopbar } from './topbar';
