@@ -28,8 +28,9 @@ export function VariableInput({
   );
 
   useEffect(() => {
+    if (isRadius) return;
     setVar(editMode, varKey, valueToOklch(debouncedHex));
-  }, [debouncedHex, editMode, varKey, setVar]);
+  }, [debouncedHex, editMode, varKey, setVar, isRadius]);
 
   function handlePickerChange(e: React.ChangeEvent<HTMLInputElement>) {
     setLocalHex(e.target.value);

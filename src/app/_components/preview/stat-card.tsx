@@ -29,11 +29,11 @@ export function StatCard({
       </CardHeader>
       <CardContent>
         <div className='text-2xl font-bold text-foreground'>{value}</div>
-        <div className='flex items-center gap-1 mt-1'>
+        <div className='flex items-center gap-1 mt-1 flex-wrap'>
           {positive ? (
-            <TrendingUp className='size-3 text-chart-2' />
+            <TrendingUp className='size-3 flex-shrink-0 text-chart-2' />
           ) : (
-            <TrendingDown className='size-3 text-destructive' />
+            <TrendingDown className='size-3 flex-shrink-0 text-destructive' />
           )}
           <span
             className={cn(
@@ -43,7 +43,7 @@ export function StatCard({
           >
             {delta}
           </span>
-          <span className='text-[11px] text-muted-foreground'>
+          <span className='text-[11px] text-muted-foreground whitespace-nowrap'>
             vs last period
           </span>
         </div>

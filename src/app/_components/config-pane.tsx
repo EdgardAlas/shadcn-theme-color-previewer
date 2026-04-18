@@ -228,17 +228,17 @@ export function ConfigPane({ className }: { className?: string }) {
                     <Eye className='size-3.5' />
                     Preview
                   </DialogTrigger>
-                  <DialogContent className='sm:max-w-3xl w-full'>
+                  <DialogContent className='max-w-[calc(100vw-2rem)] sm:max-w-3xl w-full'>
                     <DialogHeader>
                       <DialogTitle className='font-mono text-sm'>
                         CSS Output
                       </DialogTitle>
                     </DialogHeader>
-                    <ScrollArea className='h-[60vh] rounded-md border border-border bg-muted/40'>
+                    <div className='h-[60vh] overflow-auto rounded-md border border-border bg-muted/40'>
                       <pre className='p-4 text-[11px] font-mono leading-relaxed text-foreground whitespace-pre'>
                         {generateCSS(light, dark)}
                       </pre>
-                    </ScrollArea>
+                    </div>
                     <DialogFooter showCloseButton>
                       <Button
                         onClick={handleCopyInDialog}
