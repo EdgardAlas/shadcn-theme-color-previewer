@@ -28,11 +28,12 @@ export function VariableInput({
     80,
   );
 
+  // Sync localHex whenever the store value changes externally (loadTheme, resetToDefaults, editMode switch)
   useEffect(() => {
     if (isRadius) return;
-    setLocalHex(valueToHex(vars[varKey]));
+    setLocalHex(valueToHex(value));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editMode]);
+  }, [value, isRadius]);
 
   useEffect(() => {
     if (isRadius) return;

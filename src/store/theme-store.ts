@@ -19,6 +19,10 @@ interface ThemeStore {
   deleteTheme: (id: string) => void;
   duplicateTheme: (id: string, newName: string) => void;
   resetToDefaults: () => void;
+  importTheme: (partial: {
+    light?: Partial<ThemeVars>;
+    dark?: Partial<ThemeVars>;
+  }) => void;
 }
 
 export const useThemeStore = create<ThemeStore>()(
@@ -76,7 +80,20 @@ export const useThemeStore = create<ThemeStore>()(
 
       resetToDefaults: () =>
         set({ light: { ...DEFAULT_LIGHT }, dark: { ...DEFAULT_DARK } }),
+
+      importTheme: (partial) =>
+        set((state) => ({
+          light: { ...state.light, ...partial.light },
+          dark: { ...state.dark, ...partial.dark },
+        })),
     }),
-    { name: 'shadcn-theme-store' },
+    {
+      name: 'shadcn-theme-store',
+      partialize: (state) => ({
+        light: state.light,
+        dark: state.dark,
+        savedThemes: state.savedThemes,
+      }),
+    },
   ),
 );

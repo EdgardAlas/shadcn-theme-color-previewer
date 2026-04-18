@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ClipboardCopy, RotateCcw, Check, Eye, X } from 'lucide-react';
+import { useState, useRef, useCallback } from 'react';
+import { ClipboardCopy, RotateCcw, Check, Eye, X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -22,6 +22,7 @@ import { useThemeStore } from '@/store/theme-store';
 import { VariableInput } from './variable-input';
 import { ThemeManager } from './theme-manager';
 import { generateCSS } from '@/lib/theme-export';
+import { parseThemeCSS } from '@/lib/theme-import';
 import { cn } from '@/lib/utils';
 import type { ThemeVars } from '@/types/theme';
 
@@ -100,10 +101,50 @@ const VAR_GROUPS: VarGroup[] = [
 
 export function ConfigPane({ className }: { className?: string }) {
   const { toggleSidebar } = useSidebar();
-  const { light, dark, editMode, setEditMode, resetToDefaults } =
-    useThemeStore();
+  const {
+    light,
+    dark,
+    editMode,
+    setEditMode,
+    setPreviewMode,
+    resetToDefaults,
+    importTheme,
+  } = useThemeStore();
   const [copied, setCopied] = useState(false);
   const [copiedInDialog, setCopiedInDialog] = useState(false);
+  const [importCss, setImportCss] = useState('');
+  const [importOpen, setImportOpen] = useState(false);
+  const [importResult, setImportResult] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = ev.target?.result;
+        if (typeof text === 'string') setImportCss(text);
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    },
+    [],
+  );
+
+  function handleApplyImport() {
+    const parsed = parseThemeCSS(importCss);
+    const lightCount = Object.keys(parsed.light).length;
+    const darkCount = Object.keys(parsed.dark).length;
+    if (lightCount === 0 && darkCount === 0) {
+      setImportResult('No recognizable variables found.');
+      return;
+    }
+    importTheme(parsed);
+    setImportResult(
+      `Applied ${lightCount} light + ${darkCount} dark variables.`,
+    );
+  }
 
   function handleCopy() {
     const css = generateCSS(light, dark);
@@ -143,7 +184,10 @@ export function ConfigPane({ className }: { className?: string }) {
           </Button>
           <div className='flex items-center gap-0.5 bg-muted rounded-md p-0.5'>
             <button
-              onClick={() => setEditMode('light')}
+              onClick={() => {
+                setEditMode('light');
+                setPreviewMode('light');
+              }}
               className={`px-2.5 py-0.5 rounded text-[11px] transition-all ${
                 editMode === 'light'
                   ? 'bg-background text-foreground shadow-sm'
@@ -153,7 +197,10 @@ export function ConfigPane({ className }: { className?: string }) {
               Light
             </button>
             <button
-              onClick={() => setEditMode('dark')}
+              onClick={() => {
+                setEditMode('dark');
+                setPreviewMode('dark');
+              }}
               className={`px-2.5 py-0.5 rounded text-[11px] transition-all ${
                 editMode === 'dark'
                   ? 'bg-background text-foreground shadow-sm'
@@ -195,6 +242,101 @@ export function ConfigPane({ className }: { className?: string }) {
               Export
             </div>
             <div className='p-3 flex flex-col gap-2'>
+              <Dialog
+                open={importOpen}
+                onOpenChange={(v) => {
+                  setImportOpen(v);
+                  if (!v) {
+                    setImportResult(null);
+                    setImportCss('');
+                  }
+                }}
+              >
+                <DialogTrigger
+                  render={
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='w-full h-8 text-xs font-mono gap-1.5'
+                    />
+                  }
+                >
+                  <Upload className='size-3.5' />
+                  Import CSS
+                </DialogTrigger>
+                <DialogContent className='max-w-[calc(100vw-2rem)] sm:max-w-2xl w-full'>
+                  <DialogHeader>
+                    <DialogTitle className='font-mono text-sm'>
+                      Import CSS Variables
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className='flex flex-col gap-3'>
+                    <p className='text-[11px] text-muted-foreground font-mono leading-relaxed'>
+                      Paste or upload a shadcn CSS file. Variables in{' '}
+                      <code>:root</code> map to light, <code>.dark</code> to
+                      dark.
+                    </p>
+                    <div className='flex gap-2'>
+                      <input
+                        ref={fileInputRef}
+                        type='file'
+                        accept='.css,text/css'
+                        onChange={handleFileUpload}
+                        className='hidden'
+                      />
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='h-7 text-xs font-mono gap-1.5'
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Upload className='size-3' />
+                        Upload file
+                      </Button>
+                    </div>
+                    <textarea
+                      value={importCss}
+                      onChange={(e) => {
+                        setImportCss(e.target.value);
+                        setImportResult(null);
+                      }}
+                      placeholder={`:root {
+  --background: oklch(1 0 0);
+  --primary: oklch(0.205 0 0);
+  /* ... */
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  /* ... */
+}`}
+                      className='h-52 w-full rounded-md border border-border bg-muted/40 p-3 text-[11px] font-mono leading-relaxed resize-none outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50'
+                    />
+                    {importResult && (
+                      <p
+                        className={cn(
+                          'text-[11px] font-mono',
+                          importResult.startsWith('No')
+                            ? 'text-destructive'
+                            : 'text-chart-2',
+                        )}
+                      >
+                        {importResult}
+                      </p>
+                    )}
+                  </div>
+                  <DialogFooter showCloseButton>
+                    <Button
+                      onClick={handleApplyImport}
+                      size='sm'
+                      className='h-8 text-xs font-mono gap-1.5'
+                      disabled={!importCss.trim()}
+                    >
+                      Apply
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <div className='flex gap-2'>
                 <Button
                   onClick={handleCopy}
