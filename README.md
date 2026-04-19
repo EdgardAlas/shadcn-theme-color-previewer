@@ -24,6 +24,19 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Analytics
+
+The app uses [Umami](https://umami.is) for privacy-friendly, cookieless analytics. It only runs in production.
+
+Add these to `.env.local` with your Umami credentials:
+
+| Variable                           | Description                          |
+| ---------------------------------- | ------------------------------------ |
+| `NEXT_PUBLIC_ANALYTICS_URL`        | URL of your Umami script             |
+| `NEXT_PUBLIC_ANALYTICS_WEBSITE_ID` | Website ID from your Umami dashboard |
+
+If either variable is not set, analytics are simply skipped.
+
 ## Export Format
 
 ```css

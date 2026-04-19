@@ -69,12 +69,14 @@ export default function RootLayout({
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
 
-        <Script
-          async
-          defer
-          src={process.env.NEXT_PUBLIC_ANALYTICS_URL}
-          data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_WEBSITE_ID}
-        />
+        {process.env.NODE_ENV === 'production' && (
+          <Script
+            async
+            defer
+            src={process.env.NEXT_PUBLIC_ANALYTICS_URL}
+            data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_WEBSITE_ID}
+          />
+        )}
       </body>
     </html>
   );
