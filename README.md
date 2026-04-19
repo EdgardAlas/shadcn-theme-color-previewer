@@ -24,36 +24,6 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Structure
-
-```
-src/
-  app/
-    _components/
-      config-pane.tsx      # Right panel: variable inputs, theme manager, export
-      preview-pane.tsx     # Left panel: live dashboard mockup
-      theme-manager.tsx    # Save/load/duplicate/delete themes
-      variable-input.tsx   # Single CSS variable row (swatch + input)
-      preview/
-        dashboard.tsx      # Dashboard shell with stat cards, charts, tabs
-        components-tab.tsx # Interactive elements, skeletons, inputs, alerts
-        form-tab.tsx       # Form controls and progress metrics
-        activity-tab.tsx   # User table and activity feed
-        colors-tab.tsx     # Token-by-token color reference
-    globals.css
-    layout.tsx
-    page.tsx
-  lib/
-    theme-defaults.ts
-    theme-export.ts
-    theme-import.ts
-    color-utils.ts
-  store/
-    theme-store.ts
-  types/
-    theme.ts
-```
-
 ## Export Format
 
 ```css
@@ -74,7 +44,3 @@ src/
 ```
 
 Paste into `globals.css`, replacing the existing theme block.
-
-## Variables
-
-33 tokens: base colors, card, popover, primary, secondary, muted, accent, destructive, border/input/ring, chart-1–5, radius, 8 sidebar tokens.
