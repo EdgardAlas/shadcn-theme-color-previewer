@@ -5,6 +5,7 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from '@/components/theme-provider';
+import Script from 'next/script';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const ibmPlexMono = IBM_Plex_Mono({
@@ -67,6 +68,13 @@ export default function RootLayout({
         >
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
+
+        <Script
+          async
+          defer
+          src={process.env.NEXT_PUBLIC_ANALYTICS_URL}
+          data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_WEBSITE_ID}
+        />
       </body>
     </html>
   );

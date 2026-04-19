@@ -1,16 +1,14 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import {
   ClipboardCopy,
   RotateCcw,
   Check,
   Eye,
   X,
-  Upload,
   Search,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from 'lucide-react';import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -35,149 +33,10 @@ import {
 import { useThemeStore } from '@/store/theme-store';
 import { VariableInput } from './variable-input';
 import { ThemeManager } from './theme-manager';
+import { ImportCSSDialog } from './import-css-dialog';
 import { generateCSS } from '@/lib/theme-export';
-import { parseThemeCSS } from '@/lib/theme-import';
 import { cn } from '@/lib/utils';
-import type { ThemeVars } from '@/types/theme';
-
-type VarGroup = {
-  label: string;
-  vars: { key: keyof ThemeVars; isRadius?: boolean; description?: string }[];
-};
-
-const VAR_GROUPS: VarGroup[] = [
-  {
-    label: 'Base',
-    vars: [
-      {
-        key: 'background',
-        description: 'Main page background, entire app canvas',
-      },
-      { key: 'foreground', description: 'Default text color and icons' },
-      { key: 'border', description: 'Card edges, table rows, dividers' },
-      { key: 'input', description: 'Text input and select field borders' },
-      {
-        key: 'ring',
-        description: 'Focus ring on buttons, inputs, interactive elements',
-      },
-    ],
-  },
-  {
-    label: 'Card',
-    vars: [
-      { key: 'card', description: 'Stat card backgrounds, content panels' },
-      { key: 'card-foreground', description: 'Text inside cards and panels' },
-    ],
-  },
-  {
-    label: 'Popover',
-    vars: [
-      {
-        key: 'popover',
-        description: 'Dropdown menus, select popups, sheet panels',
-      },
-      {
-        key: 'popover-foreground',
-        description: 'Text in dropdowns and sheet panels',
-      },
-    ],
-  },
-  {
-    label: 'Primary',
-    vars: [
-      {
-        key: 'primary',
-        description: 'Primary action buttons, active indicators',
-      },
-      { key: 'primary-foreground', description: 'Text on primary buttons' },
-    ],
-  },
-  {
-    label: 'Secondary',
-    vars: [
-      { key: 'secondary', description: 'Secondary buttons, outlined badges' },
-      { key: 'secondary-foreground', description: 'Text on secondary buttons' },
-    ],
-  },
-  {
-    label: 'Muted',
-    vars: [
-      {
-        key: 'muted',
-        description: 'Subtle section backgrounds, skeleton loaders',
-      },
-      {
-        key: 'muted-foreground',
-        description: 'Labels, metadata, captions, placeholder text',
-      },
-    ],
-  },
-  {
-    label: 'Accent',
-    vars: [
-      { key: 'accent', description: 'Menu item hover/focus highlight' },
-      {
-        key: 'accent-foreground',
-        description: 'Text on highlighted menu items',
-      },
-    ],
-  },
-  {
-    label: 'Destructive',
-    vars: [
-      {
-        key: 'destructive',
-        description: 'Delete buttons, error states, warnings',
-      },
-      {
-        key: 'destructive-foreground',
-        description: 'Text on destructive elements',
-      },
-    ],
-  },
-  {
-    label: 'Charts',
-    vars: [
-      { key: 'chart-1', description: 'Bar chart primary series' },
-      { key: 'chart-2', description: 'Bar chart secondary series' },
-      { key: 'chart-3', description: 'Area chart fill' },
-      { key: 'chart-4', description: 'Line chart stroke' },
-      { key: 'chart-5', description: 'Donut chart accent segment' },
-    ],
-  },
-  {
-    label: 'Radius',
-    vars: [
-      {
-        key: 'radius',
-        isRadius: true,
-        description: 'Border radius on cards, buttons, inputs',
-      },
-    ],
-  },
-  {
-    label: 'Sidebar',
-    vars: [
-      { key: 'sidebar', description: 'Sidebar panel background' },
-      { key: 'sidebar-foreground', description: 'Sidebar nav text and icons' },
-      {
-        key: 'sidebar-primary',
-        description: 'Active nav item background in sidebar',
-      },
-      {
-        key: 'sidebar-primary-foreground',
-        description: 'Text on active sidebar nav item',
-      },
-      { key: 'sidebar-accent', description: 'Sidebar nav item hover state' },
-      {
-        key: 'sidebar-accent-foreground',
-        description: 'Text on hovered sidebar items',
-      },
-      { key: 'sidebar-border', description: 'Sidebar divider line' },
-      { key: 'sidebar-ring', description: 'Focus ring inside sidebar' },
-    ],
-  },
-];
+import { VAR_GROUPS } from './var-groups';
 
 export function ConfigPane({ className }: { className?: string }) {
   const { toggleSidebar } = useSidebar();
@@ -188,50 +47,16 @@ export function ConfigPane({ className }: { className?: string }) {
     setEditMode,
     setPreviewMode,
     resetToDefaults,
-    importTheme,
   } = useThemeStore();
   const [copied, setCopied] = useState(false);
   const [copiedInDialog, setCopiedInDialog] = useState(false);
-  const [importCss, setImportCss] = useState('');
-  const [importOpen, setImportOpen] = useState(false);
-  const [importResult, setImportResult] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const text = ev.target?.result;
-        if (typeof text === 'string') setImportCss(text);
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    },
-    [],
-  );
 
   function handleCopyCSS(setFlag: (v: boolean) => void) {
     navigator.clipboard.writeText(generateCSS(light, dark)).then(() => {
       setFlag(true);
       setTimeout(() => setFlag(false), 2000);
     });
-  }
-
-  function handleApplyImport() {
-    const parsed = parseThemeCSS(importCss);
-    const lightCount = Object.keys(parsed.light).length;
-    const darkCount = Object.keys(parsed.dark).length;
-    if (lightCount === 0 && darkCount === 0) {
-      setImportResult('No recognizable variables found.');
-      return;
-    }
-    importTheme(parsed);
-    setImportResult(
-      `Applied ${lightCount} light + ${darkCount} dark variables.`,
-    );
   }
 
   function handleCopy() {
@@ -278,6 +103,8 @@ export function ConfigPane({ className }: { className?: string }) {
                 setEditMode('light');
                 setPreviewMode('light');
               }}
+              data-umami-event="edit-mode-switched"
+              data-umami-event-mode="light"
               className={`px-2.5 py-0.5 rounded text-[11px] transition-all ${
                 editMode === 'light'
                   ? 'bg-background text-foreground shadow-sm'
@@ -291,6 +118,8 @@ export function ConfigPane({ className }: { className?: string }) {
                 setEditMode('dark');
                 setPreviewMode('dark');
               }}
+              data-umami-event="edit-mode-switched"
+              data-umami-event-mode="dark"
               className={`px-2.5 py-0.5 rounded text-[11px] transition-all ${
                 editMode === 'dark'
                   ? 'bg-background text-foreground shadow-sm'
@@ -307,6 +136,7 @@ export function ConfigPane({ className }: { className?: string }) {
                   variant='ghost'
                   size='sm'
                   onClick={resetToDefaults}
+                  data-umami-event="variables-reset"
                   className='size-7 p-0 text-muted-foreground'
                 />
               }
@@ -356,107 +186,15 @@ export function ConfigPane({ className }: { className?: string }) {
               Export
             </div>
             <div className='p-3 flex flex-col gap-2'>
-              <Dialog
-                open={importOpen}
-                onOpenChange={(v) => {
-                  setImportOpen(v);
-                  if (!v) {
-                    setImportResult(null);
-                    setImportCss('');
-                  }
-                }}
-              >
-                <DialogTrigger
-                  render={
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      className='w-full h-8 text-xs font-mono gap-1.5'
-                    />
-                  }
-                >
-                  <Upload className='size-3.5' />
-                  Import CSS
-                </DialogTrigger>
-                <DialogContent className='max-w-[calc(100vw-2rem)] sm:max-w-2xl w-full'>
-                  <DialogHeader>
-                    <DialogTitle className='font-mono text-sm'>
-                      Import CSS Variables
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div className='flex flex-col gap-3'>
-                    <p className='text-[11px] text-muted-foreground font-mono leading-relaxed'>
-                      Paste or upload a shadcn CSS file. Variables in{' '}
-                      <code>:root</code> map to light, <code>.dark</code> to
-                      dark.
-                    </p>
-                    <div className='flex gap-2'>
-                      <input
-                        ref={fileInputRef}
-                        type='file'
-                        accept='.css,text/css'
-                        onChange={handleFileUpload}
-                        className='hidden'
-                      />
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='h-7 text-xs font-mono gap-1.5'
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        <Upload className='size-3' />
-                        Upload file
-                      </Button>
-                    </div>
-                    <textarea
-                      value={importCss}
-                      onChange={(e) => {
-                        setImportCss(e.target.value);
-                        setImportResult(null);
-                      }}
-                      placeholder={`:root {
-  --background: oklch(1 0 0);
-  --primary: oklch(0.205 0 0);
-  /* ... */
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  /* ... */
-}`}
-                      className='h-52 w-full rounded-md border border-border bg-muted/40 p-3 text-[11px] font-mono leading-relaxed resize-none outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50'
-                    />
-                    {importResult && (
-                      <p
-                        className={cn(
-                          'text-[11px] font-mono',
-                          importResult.startsWith('No')
-                            ? 'text-destructive'
-                            : 'text-chart-2',
-                        )}
-                      >
-                        {importResult}
-                      </p>
-                    )}
-                  </div>
-                  <DialogFooter showCloseButton>
-                    <Button
-                      onClick={handleApplyImport}
-                      size='sm'
-                      className='h-8 text-xs font-mono gap-1.5'
-                      disabled={!importCss.trim()}
-                    >
-                      Apply
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <ImportCSSDialog />
               <div className='flex gap-2'>
                 <Button
                   onClick={handleCopy}
                   variant='outline'
                   size='sm'
                   className='flex-1 h-8 text-xs font-mono gap-1.5'
+                  data-umami-event="css-copied"
+                  data-umami-event-source="toolbar"
                 >
                   {copied ? (
                     <>
@@ -478,6 +216,7 @@ export function ConfigPane({ className }: { className?: string }) {
                         variant='outline'
                         size='sm'
                         className='h-8 text-xs font-mono gap-1.5'
+                        data-umami-event="css-preview-opened"
                       />
                     }
                   >
@@ -501,6 +240,8 @@ export function ConfigPane({ className }: { className?: string }) {
                         variant='outline'
                         size='sm'
                         className='h-8 text-xs font-mono gap-1.5'
+                        data-umami-event="css-copied"
+                        data-umami-event-source="dialog"
                       >
                         {copiedInDialog ? (
                           <>
@@ -549,7 +290,9 @@ export function ConfigPane({ className }: { className?: string }) {
           )}
         </div>
 
-        <div className='h-8' />
+        <div className='px-3 py-4 text-[10px] font-mono text-muted-foreground/60 text-center leading-relaxed'>
+          This site uses anonymous analytics (no cookies, no personal data).
+        </div>
       </ScrollArea>
     </div>
   );

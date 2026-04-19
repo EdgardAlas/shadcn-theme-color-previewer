@@ -43,6 +43,7 @@ export function ThemeManager() {
           onClick={handleSave}
           disabled={!themeName.trim()}
           className='h-7 px-3 text-xs'
+          data-umami-event="theme-saved"
         >
           Save
         </Button>
@@ -65,6 +66,7 @@ export function ThemeManager() {
               <button
                 onClick={() => loadTheme(theme.id)}
                 className='flex-1 text-left text-xs font-mono truncate text-foreground hover:text-primary transition-colors'
+                data-umami-event="theme-loaded"
               >
                 {theme.name}
               </button>
@@ -77,6 +79,7 @@ export function ThemeManager() {
                         size='sm'
                         onClick={() => handleDuplicate(theme.id, theme.name)}
                         className='size-6 p-0'
+                        data-umami-event="theme-duplicated"
                       />
                     }
                   >
@@ -92,6 +95,7 @@ export function ThemeManager() {
                         size='sm'
                         onClick={() => loadTheme(theme.id)}
                         className='size-6 p-0'
+                        data-umami-event="theme-loaded"
                       />
                     }
                   >
@@ -107,6 +111,7 @@ export function ThemeManager() {
                         size='sm'
                         onClick={() => deleteTheme(theme.id)}
                         className='size-6 p-0 text-destructive hover:text-destructive'
+                        data-umami-event="theme-deleted"
                       />
                     }
                   >
