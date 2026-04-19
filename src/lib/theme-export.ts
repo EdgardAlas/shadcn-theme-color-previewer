@@ -4,8 +4,6 @@ import { valueToOklch } from './color-utils';
 const THEME_BLOCK = `@theme inline {
 \t--color-background: var(--background);
 \t--color-foreground: var(--foreground);
-\t--font-sans: var(--font-sans);
-\t--font-mono: var(--font-geist-mono);
 \t--color-sidebar-ring: var(--sidebar-ring);
 \t--color-sidebar-border: var(--sidebar-border);
 \t--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
