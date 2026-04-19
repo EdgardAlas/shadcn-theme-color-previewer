@@ -12,7 +12,7 @@ export function valueToOklch(value: string): string {
     if (!ok) return value;
     const l = +ok.l.toFixed(4);
     const c = +ok.c.toFixed(4);
-    const h = ok.h !== undefined ? +ok.h.toFixed(2) : 0;
+    const h = ok.h !== undefined ? +ok.h.toFixed(4) : 0;
     const alpha =
       ok.alpha !== undefined && ok.alpha < 1
         ? ` / ${+ok.alpha.toFixed(4)}`
