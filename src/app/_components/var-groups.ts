@@ -89,10 +89,6 @@ export const VAR_GROUPS: VarGroup[] = [
         key: 'destructive',
         description: 'Delete buttons, error states, warnings',
       },
-      {
-        key: 'destructive-foreground',
-        description: 'Text on destructive elements',
-      },
     ],
   },
   {

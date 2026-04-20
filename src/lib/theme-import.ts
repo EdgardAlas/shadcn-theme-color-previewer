@@ -16,7 +16,6 @@ const THEME_KEYS = new Set<keyof ThemeVars>([
   'accent',
   'accent-foreground',
   'destructive',
-  'destructive-foreground',
   'border',
   'input',
   'ring',

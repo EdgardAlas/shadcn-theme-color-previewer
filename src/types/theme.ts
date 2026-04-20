@@ -14,7 +14,6 @@ export interface ThemeVars {
   accent: string;
   'accent-foreground': string;
   destructive: string;
-  'destructive-foreground': string;
   border: string;
   input: string;
   ring: string;

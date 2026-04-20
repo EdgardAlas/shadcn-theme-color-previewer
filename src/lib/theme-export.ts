@@ -58,7 +58,6 @@ const LIGHT_VAR_ORDER: (keyof ThemeVars)[] = [
   'accent',
   'accent-foreground',
   'destructive',
-  'destructive-foreground',
   'border',
   'input',
   'ring',

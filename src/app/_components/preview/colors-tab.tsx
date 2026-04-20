@@ -67,17 +67,9 @@ function DestructiveCard() {
             </span>
           </div>
         </div>
-        <div
-          className='flex items-center gap-2 rounded-md px-3 py-2'
-          style={{
-            backgroundColor: 'var(--destructive)',
-            color: 'var(--destructive-foreground)',
-          }}
-        >
+        <div className='flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-destructive'>
           <Trash2 className='size-3 shrink-0' />
-          <span className='text-xs font-medium'>
-            Delete item — destructive-foreground text
-          </span>
+          <span className='text-xs font-medium'>Delete item</span>
         </div>
         <div className='flex gap-2 items-center'>
           <Button
